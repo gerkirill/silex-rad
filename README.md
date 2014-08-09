@@ -38,14 +38,14 @@ Detects twig template name by the current controller and action. Requires contro
 $app->register(new \SilexRad\AutoTemplate\Provider\AutoTemplateProvider());
 ```
 
-In you controller you now can do like this:
+In your controller you now can do like this:
 
 ```php
 class MyTestController {
     private $app;
     ...
     public fucntion myExample() {
-        return $this->app['auto-tempalte.render']($data);
+        return $this->app['auto_template.render'](['hello' => 'world']);
     }    
 }
 ```
