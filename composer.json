@@ -1,0 +1,17 @@
+{
+    "name": "gerkirill/silex-rad",
+    "description": "Set of dead simple Silex services for faster development",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gerasimenko Kirill",
+            "email": "ger.kirill@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "autoload": {
+        "psr-4": {"SilexRad\\": "src/SilexRad"}
+    }
+}
