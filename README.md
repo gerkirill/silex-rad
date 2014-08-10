@@ -3,6 +3,15 @@ Silex RAD tools
 
 Set of dead simple Silex services to make development faster.
 
+Installation
+------------
+
+Using composer
+
+```js
+{"require": {"gerkirill/silex-rad": "dev-master"}}
+```
+
 Auto-Service
 ------------
 
