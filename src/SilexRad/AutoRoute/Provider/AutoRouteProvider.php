@@ -9,13 +9,13 @@ class AutoRouteProvider implements ServiceProviderInterface {
 
     public function register(Application $app) {
         $app['auto_route.controller_resolver'] = $app->protect(function($controller, $action='index') use ($app) {
-            function dashedToCamelCase($string) {
+            $dashedToCamelCase = function($string) {
                 return preg_replace_callback('%(-.)%', function($m) {
                     return ltrim(strtoupper($m[0]), '-');
                 }, $string);
             };
-            $action = dashedToCamelCase($action);
-            $controllerService = ucfirst(dashedToCamelCase($controller)) . 'Controller';
+            $action = $dashedToCamelCase($action);
+            $controllerService = ucfirst($dashedToCamelCase($controller)) . 'Controller';
             return array($controllerService, $action);
         });
     }
