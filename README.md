@@ -53,7 +53,7 @@ In your controller you now can do like this:
 class MyTestController {
     private $app;
     ...
-    public fucntion myExample() {
+    public function myExample() {
         return $this->app['auto_template.render'](['hello' => 'world']);
     }    
 }
