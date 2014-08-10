@@ -19,8 +19,8 @@ Registers all the classes located in the given directories as services. The cons
 
 ```php
 $app->register(new \SilexRad\AutoService\Provider\AutoServiceProvider(), array(
-    __DIR__ . '/../src/Service' => array(
-        'namespace' => 'Service'
+    'auto_service.directories' => array(
+        __DIR__ . '/../src/Service' => array('namespace' => 'Service')
     )
 ));
 ```

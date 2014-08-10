@@ -11,6 +11,9 @@
     "require": {
         "php": ">=5.3.3"
     },
+    "require-dev": {
+        "silex/silex": "~1.2"
+    },
     "autoload": {
         "psr-4": {"SilexRad\\": "src/SilexRad"}
     }
