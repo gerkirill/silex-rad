@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AutoTemplateProviderTest extends \PHPUnit_Framework_TestCase {
     public function testRouteWorks() {
-        $app = new Application(['debug'=>true]);
+        $app = new Application();
         $app->register(new AutoRouteProvider());
         $app->register(new AutoTemplateProvider());
         $app->register(new TwigServiceProvider(), array(
