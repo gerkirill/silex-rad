@@ -3,6 +3,8 @@ Silex RAD tools
 
 Set of dead simple Silex services to make development faster.
 
+[![Build Status](https://travis-ci.org/gerkirill/silex-rad.svg?branch=master)](https://travis-ci.org/gerkirill/silex-rad)
+
 Installation
 ------------
 
