@@ -60,3 +60,6 @@ class MyTestController {
 ```
 
 And corresponding template would be my-test/my-example.twig under template directory configured for twig.
+
+Extension points
+----------------
