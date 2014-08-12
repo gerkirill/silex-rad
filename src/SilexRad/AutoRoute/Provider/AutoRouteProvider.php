@@ -3,34 +3,29 @@ namespace SilexRad\AutoRoute\Provider;
 
 use Silex\ServiceProviderInterface;
 use Silex\Application;
+use SilexRad\Provider\SilexRadProvider;
+use SilexRad\ServiceNameConverterInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AutoRouteProvider implements ServiceProviderInterface {
 
     public function register(Application $app) {
-        $app['auto_route.controller_resolver'] = $app->protect(function($controller, $action='index') use ($app) {
-            $dashedToCamelCase = function($string) {
-                return preg_replace_callback('%(-.)%', function($m) {
-                    return ltrim(strtoupper($m[0]), '-');
-                }, $string);
-            };
-            $action = $dashedToCamelCase($action);
-            $controllerService = ucfirst($dashedToCamelCase($controller)) . 'Controller';
-            return array($controllerService, $action);
-        });
+        $app->register(new SilexRadProvider());
     }
 
     public function boot(Application $app) {
-        $app->match('/{controller}/{action}', function($controller, $action='index') use ($app) {
-            
-            list($controllerService, $action) = $app['auto_route.controller_resolver']($controller, $action);
-            $app['request']->attributes->set('_controller', $controllerService . ':' . $action);
-            if (!method_exists($app[$controllerService], $action)) {
+        $app->match('/{url}', function($url) use ($app) {
+            /** @var ServiceNameConverterInterface $converter */
+            $converter = $app['silex_rad.service_name_converter'];
+            $controller = $converter->urlToController($url);
+            $app['request']->attributes->set('_controller', $controller);
+            list($controllerService, $method) = explode(':', $controller);
+            if (!method_exists($app[$controllerService], $method)) {
                 throw new NotFoundHttpException(
-                    sprintf('Can not find controller %s:%s', $controllerService, $action)
+                    sprintf('Can not find controller %s:%s', $controllerService, $method)
                 );
             }
-            return $app[$controllerService]->$action($app['request']);
-        })->value('action', 'index')->bind('auto_route');
+            return $app[$controllerService]->$method($app['request']);
+        })->value('url', 'default/index')->bind('auto_route')->assert('url', '.*');
     }
 }

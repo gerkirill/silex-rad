@@ -3,18 +3,18 @@ namespace SilexRad\AutoTemplate\Provider;
 
 use Silex\ServiceProviderInterface;
 use Silex\Application;
+use SilexRad\Provider\SilexRadProvider;
+use SilexRad\ServiceNameConverterInterface;
 
 class AutoTemplateProvider implements ServiceProviderInterface {
     public function register(Application $app) {
+        $app->register(new SilexRadProvider());
         $app['auto_template.render'] = $app->protect(function($data=array()) use ($app) {
-            $dasherize = function($string) {
-                return strtolower(ltrim(preg_replace('/([A-Z])/', '-$1', $string), '-'));
-            };
             $controller = $app['request']->attributes->get('_controller');
-            list($service, $method) = explode(':', $controller);
-            $directory = $dasherize(preg_replace('/Controller$/', '', $service));
-            $file = $dasherize($method);
-            return $app['twig']->render("$directory/$file.twig", $data);
+            /** @var ServiceNameConverterInterface $converter */
+            $converter = $app['silex_rad.service_name_converter'];
+            $file = $converter->controllerToTemplate($controller);
+            return $app['twig']->render($file, $data);
         });
     }
 

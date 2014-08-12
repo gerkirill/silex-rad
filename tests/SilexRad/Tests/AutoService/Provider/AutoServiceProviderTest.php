@@ -14,10 +14,5 @@ class AutoServiceProviderTest extends \PHPUnit_Framework_TestCase {
         )));
         $app->boot();
         $this->assertInstanceOf('SilexRad\\Tests\\Service\\TestService', $app['TestService']);
-        //$request = Request::create('/');
-        //$app->get('/', function (Request $req) use ($request) {
-        //    return $request === $req ? 'ok' : 'ko';
-        //});
-        //$this->assertEquals('ok', $app->handle($request)->getContent());
     }
 }

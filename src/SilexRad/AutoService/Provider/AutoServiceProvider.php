@@ -3,21 +3,13 @@ namespace SilexRad\AutoService\Provider;
 
 use Silex\ServiceProviderInterface;
 use Silex\Application;
+use SilexRad\Provider\SilexRadProvider;
+use SilexRad\ServiceNameConverterInterface;
 
 class AutoServiceProvider implements ServiceProviderInterface {
 
     public function register(Application $app) {
-        
-        $app['auto_service.name_formatter'] = $app->protect(function($serviceClass, $settings) use ($app) {
-            if ($settings['add_namespace_to_service_name']) {
-                $serviceName = str_replace('\\', '.', ltrim($serviceClass, '\\'));
-            } else {
-                $nsParts = explode('\\', $serviceClass);
-                $serviceName = end($nsParts);
-            }
-            return $serviceName;
-        });
-
+        $app->register(new SilexRadProvider());
         $app['auto_service.registrator'] = $app->protect(function($serviceName, $serviceClass, $settings) use ($app) {
             $app[$serviceName] = $app->share(function() use ($app, $serviceClass) {
                 return new $serviceClass($app);
@@ -50,7 +42,6 @@ class AutoServiceProvider implements ServiceProviderInterface {
     private function getDefaults($app) {
         return array_merge(array(
             'namespace' => '',
-            'add_namespace_to_service_name' => false,
             'file_extension' => '.php'
         ), $app['auto_service.default_options']);
     }
@@ -61,17 +52,18 @@ class AutoServiceProvider implements ServiceProviderInterface {
             = strlen($serviceNamespace)
             ? sprintf('\\%s\\', trim($serviceNamespace, '\\'))
             : '';
-        $addNamespaceToServiceName = $settings['add_namespace_to_service_name'];
         $extension = $settings['file_extension'];
         $extensionRegexp = sprintf('/%s$/', preg_quote($extension));
         $dir = new \DirectoryIterator($serviceDirectory);
+        /** @var ServiceNameConverterInterface $serviceNameConverter */
+        $serviceNameConverter = $app['silex_rad.service_name_converter'];
         /* @var  $fileInfo \SplFileInfo */
         foreach($dir as $fileInfo) {
             if(!$fileInfo->isFile()) continue;
             if(!preg_match($extensionRegexp, $fileInfo->getBasename())) continue;
 
             $serviceClass = $serviceNamespaceNormalized . $fileInfo->getBasename($extension);
-            $serviceName = $app['auto_service.name_formatter']($serviceClass, $settings);
+            $serviceName = $serviceNameConverter->classToService($serviceClass);
             $app['auto_service.registrator']($serviceName, $serviceClass, $settings);
         }
     }
