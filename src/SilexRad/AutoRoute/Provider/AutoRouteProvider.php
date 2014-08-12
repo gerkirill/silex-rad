@@ -16,7 +16,7 @@ class AutoRouteProvider implements ServiceProviderInterface {
     public function boot(Application $app) {
         $app->match('/{url}', function($url) use ($app) {
             /** @var ServiceNameConverterInterface $converter */
-            $converter = $app['silex_rad.service_name_converter'];
+            $converter = $app['rad.service_name_converter'];
             $controller = $converter->urlToController($url);
             $app['request']->attributes->set('_controller', $controller);
             list($controllerService, $method) = explode(':', $controller);
@@ -26,6 +26,6 @@ class AutoRouteProvider implements ServiceProviderInterface {
                 );
             }
             return $app[$controllerService]->$method($app['request']);
-        })->value('url', 'default/index')->bind('auto_route')->assert('url', '.*');
+        })->value('url', 'default/index')->bind('rad_auto_route')->assert('url', '.*');
     }
 }

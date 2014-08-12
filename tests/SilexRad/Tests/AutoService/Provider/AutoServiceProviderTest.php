@@ -7,7 +7,7 @@ use SilexRad\AutoService\Provider\AutoServiceProvider;
 class AutoServiceProviderTest extends \PHPUnit_Framework_TestCase {
     public function testServiceRegistered() {
         $app = new Application();
-        $app->register(new AutoServiceProvider(), array('auto_service.directories' => array(
+        $app->register(new AutoServiceProvider(), array('rad.service.directories' => array(
             __DIR__ . '/../../Service' => array(
                 'namespace' => 'SilexRad\\Tests\\Service'
             )

@@ -21,7 +21,7 @@ Registers all the classes located in the given directories as services. The cons
 
 ```php
 $app->register(new \SilexRad\AutoService\Provider\AutoServiceProvider(), array(
-    'auto_service.directories' => array(
+    'rad.service.directories' => array(
         __DIR__ . '/../src/Service' => array('namespace' => 'Service')
     )
 ));
@@ -56,7 +56,7 @@ class MyTestController {
     private $app;
     ...
     public function myExample() {
-        return $this->app['auto_template.render'](['hello' => 'world']);
+        return $this->app['rad.template.render'](['hello' => 'world']);
     }    
 }
 ```

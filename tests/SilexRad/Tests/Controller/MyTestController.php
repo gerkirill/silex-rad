@@ -12,6 +12,6 @@ class MyTestController {
     }
 
     public function testTemplate() {
-        return $this->app['auto_template.render'](array('result' => 'ok'));
+        return $this->app['rad.template.render'](array('result' => 'ok'));
     }
 }
