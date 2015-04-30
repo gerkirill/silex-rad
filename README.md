@@ -17,7 +17,9 @@ Using composer
 Auto-Service
 ------------
 
-Registers all the classes located in the given directories as services. The constructor of the service will receive single parameter - $app.
+Registers all the classes located in the given directories as services (non-recursively). The constructor of the service
+will receive single parameter - $app. If you want to pass custom parameters to the constructor - just register the service
+yourself with the name auto-service would use.
 
 ```php
 $app->register(new \SilexRad\AutoService\Provider\AutoServiceProvider(), array(
@@ -27,7 +29,16 @@ $app->register(new \SilexRad\AutoService\Provider\AutoServiceProvider(), array(
 ));
 ```
 
-E.g. class MyTestService located in Service/MyTestService.php with namespace "Service" will be accessible with $app['MyTestService'].
+E.g. class Service\MyTestService located in Service/MyTestService.php will be accessible with $app['MyTestService'].
+Config key 'rad.service.directories' contains associative array where keys are paths to the folders you services reside in.
+The values are associative arrays with settings. Possible settings keys are:
+ - file_extension - '.php' by default, you can change it e.g. to '.inc' if your services use that extension. Files with 
+ other extensions will be skipped.
+ - namespace - namespace you services are grouped under, e.g. "Services" or "MyVendor/MyProject/Services"
+
+Default behaviour can be changed with settings $app['rad.service_name_converter'] and $app['rad.service.registrator'].
+You can find more details on that under "Extension points" section.
+ 
 
 Auto-Route
 ----------

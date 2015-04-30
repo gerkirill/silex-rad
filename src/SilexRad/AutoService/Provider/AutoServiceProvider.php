@@ -46,7 +46,7 @@ class AutoServiceProvider implements ServiceProviderInterface {
             = strlen($serviceNamespace)
             ? sprintf('\\%s\\', trim($serviceNamespace, '\\'))
             : '';
-        $extension = $settings['file_extension'];
+        $extension = '.' . ltrim($settings['file_extension'], '.');
         $extensionRegexp = sprintf('/%s$/', preg_quote($extension));
         $dir = new \DirectoryIterator($serviceDirectory);
         /** @var ServiceNameConverterInterface $serviceNameConverter */
@@ -58,7 +58,10 @@ class AutoServiceProvider implements ServiceProviderInterface {
 
             $serviceClass = $serviceNamespaceNormalized . $fileInfo->getBasename($extension);
             $serviceName = $serviceNameConverter->classToService($serviceClass);
-            $app['rad.service.registrator']($serviceName, $serviceClass, $settings);
+            // do not override service registered by hand
+            if (!isset($app[$serviceName])) {
+                $app['rad.service.registrator']($serviceName, $serviceClass, $settings);
+            }
         }
     }
 } 
