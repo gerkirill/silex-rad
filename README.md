@@ -46,6 +46,9 @@ Auto-Route
 Handles routes in a form of '/{controller}/{action}' automatically. Requires controllers to be classes registered as services. {action} part is optional and defaults to "index".
 
 ```php
+// this built-in service provider is required to use auto-route
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
+// here you can use AutoServiceProvider to automatically register controllers as services, or you'll have to do it manually
 $app->register(new \SilexRad\AutoRoute\Provider\AutoRouteProvider());
 ```
 
